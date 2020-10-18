@@ -71,12 +71,12 @@ let values = {
     }
 }
 
-let sortByDate = () => {
+let sortByDate = (values) => {
     let arr = []
 
     for (let key in values) {
         const DATE = new Date(values[key].date)
-        arr.push({...values[key], key: key, dateNormal: `${DATE.getDate()}/${DATE.getMonth()}/${DATE.getFullYear()}` })
+        arr.push({ ...values[key], key: key, dateNormal: `${DATE.getDate()}/${DATE.getMonth()}/${DATE.getFullYear()}` })
     }
     const firstElement = 0
     const lastElement = 4
@@ -85,24 +85,48 @@ let sortByDate = () => {
     return arr
 }
 
-let filter4Popularity =() =>{
-    let arr=[]
-    const firstElement=0
-    const lastElement=4
-    for(let key in values){
-        if(values[key].isPopular === true)
-            arr[key]={...values[key],key:key}
+let filter4Popularity = (values) => {
+    let arr = []
+    const object = {}
+    const firstElement = 0
+    const lastElement = 4
+    for (let key in values) {
+        if (values[key].isPopular === true) {
+            arr[key] = { ...values[key], category: 'popular', key: key }
+            delete arr[key].isPopular
+        }
     }
-    arr=arr.sort((a, b) => a.date - b.date).slice(firstElement, lastElement)
+
+    arr = arr.sort((a, b) => a.date - b.date).slice(firstElement, lastElement)
+
+    arr.forEach((item) => {
+        object[item.key] = item
+    })
+
+    arr = []
+    arr.push(object)
+
     return arr
 }
+
+/*
+let filter4Popularity = (values) => {
+    let arr = Object.entries(values)
+    return arr
+}
+*/
+let addKeys = (newValues) => {
+    return newValues
+}
+
 let printOutputs = (values) => {
 
     console.log('Salida 1:')
     console.log(sortByDate(values))
 
     console.log('Salida 2:')
-    console.log(filter4Popularity(values))
+    newValues = filter4Popularity(values)
+    console.log(addKeys(newValues))
 }
 
 printOutputs(values)
